@@ -29,7 +29,7 @@ DATABASE_PREFERENCES: Dict[str, str] = {
 }
 
 
-class ConfigurationProperties(metaclass=SingletonV3):
+class ConfigurationPropertiesVersion1(metaclass=SingletonV3):
     """
     Basic implementation of a configuration class backed by Python
     configuration parser and .ini file
@@ -182,7 +182,7 @@ class ConfigurationProperties(metaclass=SingletonV3):
 if __name__ == '__main__':
     basicConfig(level=INFO)
 
-    config: ConfigurationProperties = ConfigurationProperties()
+    config: ConfigurationPropertiesVersion1 = ConfigurationPropertiesVersion1()
 
     logger: Logger = getLogger(LOGGER_NAME)
 
