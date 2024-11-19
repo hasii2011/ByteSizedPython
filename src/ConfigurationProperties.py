@@ -30,6 +30,10 @@ DATABASE_PREFERENCES: Dict[str, str] = {
 
 
 class ConfigurationProperties(metaclass=SingletonV3):
+    """
+    Basic implementation of a configuration class backed by Python
+    configuration parser and .ini file
+    """
     def __init__(self):
         self.logger: Logger = getLogger(LOGGER_NAME)
 
@@ -86,7 +90,9 @@ class ConfigurationProperties(metaclass=SingletonV3):
 
     def _loadConfiguration(self):
         """
-        Load preferences from configuration file
+        Load preferences from configuration file.  May load
+        no preferences if the configuration file did not exist and
+        was created empty
         """
         self._ensureConfigurationFileExists()
         self._configParser.read(CONFIG_FILE_NAME)
@@ -97,6 +103,11 @@ class ConfigurationProperties(metaclass=SingletonV3):
 
     # noinspection PyUnusedLocal
     def _ensureConfigurationFileExists(self):
+        """
+        Creates an empty file if does not exist.  This usually occurs
+        at application start up on a new installation. We ignore the
+        exception if the file exists
+        """
         try:
             with self._configFileName.open(mode="x", encoding="utf-8") as configFD:
                 pass
@@ -104,11 +115,19 @@ class ConfigurationProperties(metaclass=SingletonV3):
             self.logger.info(f'Configuration file existed')
 
     def _createMissingSections(self):
-
+        """
+        Create missing sections.  Add additional calls for
+        each defined section
+        """
         self._createMissingSection(SECTION_GENERAL)
         self._createMissingSection(SECTION_DATABASE)
 
     def _createMissingSection(self, sectionName: str):
+        """
+        Only gets created if it is missing
+        Args:
+            sectionName: The potential section to create
+        """
 
         hasSection: bool = self._configParser.has_section(sectionName)
         self.logger.info(f'hasSection: {hasSection} - {sectionName}')
@@ -116,13 +135,26 @@ class ConfigurationProperties(metaclass=SingletonV3):
             self._configParser.add_section(sectionName)
 
     def _createMissingKeys(self):
+        """
+        Create missing keys and there values.  Add additional calls for
+        each defined section.
+
+        """
         for keyName, keyValue in GENERAL_PREFERENCES.items():
             self._createMissingKey(sectionName=SECTION_GENERAL, keyName=keyName, defaultValue=keyValue)
         for keyName, keyValue in DATABASE_PREFERENCES.items():
             self._createMissingKey(sectionName=SECTION_DATABASE, keyName=keyName, defaultValue=keyValue)
 
     def _createMissingKey(self, sectionName: str, keyName: str, defaultValue: str):
+        """
+        Only gets created if it is missing.  The configuration file is updated
+        immediately for each missing key and its value
 
+        Args:
+            sectionName:   The section name where the key resides
+            keyName:       The key name
+            defaultValue:  Its value
+        """
         if self._configParser.has_option(sectionName, keyName) is False:
             self._configParser.set(sectionName, keyName, defaultValue)
             self._saveConfiguration()
@@ -152,26 +184,28 @@ if __name__ == '__main__':
 
     config: ConfigurationProperties = ConfigurationProperties()
 
-    print(f'{config.debug=}')
-    print(f'{config.logLevel=}')
+    logger: Logger = getLogger(LOGGER_NAME)
+
+    logger.info(f'{config.debug=}')
+    logger.info(f'{config.logLevel=}')
     #
-    print('Change the values and show them')
+    logger.info('Change the values and show them')
     #
     config.debug = True
-    print(f'{config.debug=}')
+    logger.info(f'{config.debug=}')
     config.logLevel = 'Warning'
-    print(f'{config.logLevel=}')
+    logger.info(f'{config.logLevel=}')
     #
-    print('**** DataBase Section ****')
-    print(f'{config.dbName=}')
-    print(f'{config.dbHost=}')
-    print(f'{config.dbPort=}')
+    logger.info('**** DataBase Section ****')
+    logger.info(f'{config.dbName=}')
+    logger.info(f'{config.dbHost=}')
+    logger.info(f'{config.dbPort=}')
     #
-    print('Change db values and print them')
+    logger.info('Change db values and print them')
     config.dbName = 'ozzeeDb'
     config.dbHost = 'ozzeeHost'
     config.dbPort = 6666
 
-    print(f'{config.dbName=}')
-    print(f'{config.dbHost=}')
-    print(f'{config.dbPort=}')
+    logger.info(f'{config.dbName=}')
+    logger.info(f'{config.dbHost=}')
+    logger.info(f'{config.dbPort=}')
