@@ -136,7 +136,7 @@ class ConfigurationPropertiesVersion1(metaclass=SingletonV3):
 
     def _createMissingKeys(self):
         """
-        Create missing keys and there values.  Add additional calls for
+        Create missing keys and their values.  Add additional calls for
         each defined section.
 
         """

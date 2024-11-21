@@ -35,15 +35,15 @@ class PhoneyEnumByValue(Enum):
 
         match value:
             case PhoneyEnumByValue.TheWanderer.value:
-                gitHubUrlOption: PhoneyEnumByValue = PhoneyEnumByValue.TheWanderer
+                phoneyEnum: PhoneyEnumByValue = PhoneyEnumByValue.TheWanderer
             case PhoneyEnumByValue.Mentiroso.value:
-                gitHubUrlOption = PhoneyEnumByValue.Mentiroso
+                phoneyEnum = PhoneyEnumByValue.Mentiroso
             case PhoneyEnumByValue.FakeBrenda.value:
-                gitHubUrlOption = PhoneyEnumByValue.FakeBrenda
+                phoneyEnum = PhoneyEnumByValue.FakeBrenda
             case _:
                 raise Exception('Unknown PhoneyEnumByValue')
 
-        return gitHubUrlOption
+        return phoneyEnum
 
 
 class ImpostorEnumByName(Enum):
