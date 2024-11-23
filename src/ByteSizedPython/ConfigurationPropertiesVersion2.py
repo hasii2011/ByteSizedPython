@@ -4,8 +4,6 @@ from logging import getLogger
 from logging import basicConfig
 from logging import INFO
 
-from enum import Enum
-
 from codeallybasic.ConfigurationProperties import ConfigurationNameValue
 from codeallybasic.ConfigurationProperties import PropertyName
 from codeallybasic.ConfigurationProperties import Section
@@ -17,40 +15,13 @@ from codeallybasic.ConfigurationProperties import configurationSetter
 
 from codeallybasic.SingletonV3 import SingletonV3
 
+from ByteSizedPython.ImpostorEnumByName import ImpostorEnumByName
+from ByteSizedPython.PhoneyEnumByValue import PhoneyEnumByValue
 
 LOGGER_NAME:    str = 'Tutorial'
 
 BASE_FILE_NAME: str = 'config.ini'
 MODULE_NAME:    str = 'version2properties'
-
-
-class PhoneyEnumByValue(Enum):
-    TheWanderer = 'The Wanderer'
-    Mentiroso   = 'Mentiroso'
-    FakeBrenda  = 'Faker Extraordinaire'
-    NotSet      = 'Not Set'
-
-    @classmethod
-    def deSerialize(cls, value: str) -> 'PhoneyEnumByValue':
-
-        match value:
-            case PhoneyEnumByValue.TheWanderer.value:
-                phoneyEnum: PhoneyEnumByValue = PhoneyEnumByValue.TheWanderer
-            case PhoneyEnumByValue.Mentiroso.value:
-                phoneyEnum = PhoneyEnumByValue.Mentiroso
-            case PhoneyEnumByValue.FakeBrenda.value:
-                phoneyEnum = PhoneyEnumByValue.FakeBrenda
-            case _:
-                raise Exception('Unknown PhoneyEnumByValue')
-
-        return phoneyEnum
-
-
-class ImpostorEnumByName(Enum):
-    Low    = 0.1
-    Medium = 0.5
-    High   = 1.0
-    NotSet = -1.0
 
 
 DEFAULT_PHONEY_ENUM_BY_VALUE:  PhoneyEnumByValue   = PhoneyEnumByValue.FakeBrenda
